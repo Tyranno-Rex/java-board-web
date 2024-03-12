@@ -1,17 +1,17 @@
-package org.example.functions;
+package org.example.functions.post;
 
-import org.example.Database.FileController;
+import org.example.Database.getFile;
 
 import java.io.File;
 
 public class FunctionList {
     public static int list(String FILE_PATH) {
         try {
-            File folder = FileController.accessFolder(FILE_PATH);
+            File folder = getFile.accessFolder(FILE_PATH);
             File[] fileList = folder.listFiles();
             assert fileList != null;
 
-            FileController.show_filelist(fileList);
+            getFile.show_filelist(fileList);
         }
         catch (Exception e) {
             e.printStackTrace();
