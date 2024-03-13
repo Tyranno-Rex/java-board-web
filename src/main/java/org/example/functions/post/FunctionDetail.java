@@ -66,6 +66,7 @@ public class FunctionDetail {
             view_object.put("title", original.get("title"));
             view_object.put("body", original.get("body"));
             view_object.put("date", original.get("date"));
+            view_object.put("user", original.get("user"));
             view_object.put("edit", original.get("edit"));
             view_object.put("view", original.get("view"));
             view_object.put("comment", original.get("comment"));

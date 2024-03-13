@@ -3,11 +3,14 @@ import java.io.*;
 import java.util.*;
 import java.text.*;
 
+import org.example.Database.FileToJson;
+import org.example.Database.getFile;
+import org.example.model.User;
 import org.example.view.TerminalPrinter;
 import org.json.simple.JSONObject;
 public class FunctionADD {
 
-    public static int add(String FILE_PATH) {
+    public static int add(String FILE_PATH, User user) {
         try  {
             TerminalPrinter.print("게시물의 제목을 입력해주세요: ");
             Scanner scanner = new Scanner(System.in);
@@ -20,6 +23,7 @@ public class FunctionADD {
             jsonObject.put("body", body);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String date = format.format(new Date());
+            jsonObject.put("user", user.getNickName());
             jsonObject.put("date", date);
             jsonObject.put("edit", date);
             jsonObject.put("view", 1);
@@ -35,6 +39,8 @@ public class FunctionADD {
         } catch (IOException e) {
             e.printStackTrace();
             return 0;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return 2;
     }

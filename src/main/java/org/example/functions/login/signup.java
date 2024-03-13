@@ -8,6 +8,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 
@@ -151,6 +152,7 @@ public class signup {
         jsonObject.put("password", password);
         jsonObject.put("nickname", nickname);
         jsonObject.put("email", email);
+        jsonObject.put("post", new ArrayList<>());
         FileWriter fileWriter = new FileWriter(USER_FILE_PATH + id + ".json");
         fileWriter.write(jsonObject.toString());
         fileWriter.flush();

@@ -1,5 +1,6 @@
 package org.example.functions.post;
 
+import org.example.model.User;
 import org.example.view.TerminalPrinter;
 
 import java.io.IOException;
@@ -8,12 +9,12 @@ import static java.lang.System.exit;
 
 public class CommandHandler {
     private static final String POST_FILE_PATH = System.getProperty("user.dir") + "\\src\\db\\posts\\";
-    public static int  command_controller (String command) throws IOException {
+    public static int  command_controller (String command, User user) throws IOException {
         if (command.equals("exit") || command.equals("8")) {
             exit(0);
             return 0;
         } else if (command.equals("add") || command.equals("1")) {
-            int result = FunctionADD.add(POST_FILE_PATH);
+            int result = FunctionADD.add(POST_FILE_PATH, user);
             return result;
         } else if (command.equals("list") || command.equals("2")) {
             int result = FunctionList.list(POST_FILE_PATH);
