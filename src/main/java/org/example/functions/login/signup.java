@@ -2,6 +2,7 @@ package org.example.functions.login;
 
 import org.example.Database.FileToJson;
 import org.example.Database.getFile;
+import org.example.model.User;
 import org.example.view.TerminalPrinter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -146,6 +147,8 @@ public class signup {
             }
             TerminalPrinter.println("이메일 형식이 올바르지 않습니다.");
         }
+
+        User user = new User(nickname, email, "user", password);
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", id);

@@ -21,10 +21,10 @@ public class CommandHandler {
             return result;
         } else if (command.equals("detail") || command.equals("3")) {
             int result = FunctionDetail.detail(POST_FILE_PATH);
-            return 1;
+            return result;
         } else if (command.equals("update") || command.equals("4")) {
             FunctionUpdate.update(POST_FILE_PATH);
-            return 5;
+            return 1;
         } else if (command.equals("delete") || command.equals("5")) {
             int result = FunctionDelete.delete(POST_FILE_PATH);
             return result;
