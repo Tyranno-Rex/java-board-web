@@ -14,22 +14,22 @@ public class CommandHandler {
             exit(0);
             return 0;
         } else if (command.equals("add") || command.equals("1")) {
-            int result = FunctionADD.add(POST_FILE_PATH, user);
+            int result = FunctionADD.add(user);
             return result;
         } else if (command.equals("list") || command.equals("2")) {
-            int result = FunctionList.list(POST_FILE_PATH);
+            int result = FunctionList.list();
             return result;
         } else if (command.equals("detail") || command.equals("3")) {
-            int result = FunctionDetail.detail(POST_FILE_PATH);
+            int result = FunctionDetail.detail(user);
             return result;
         } else if (command.equals("update") || command.equals("4")) {
-            FunctionUpdate.update(POST_FILE_PATH);
+            FunctionUpdate.update(user);
             return 1;
         } else if (command.equals("delete") || command.equals("5")) {
-            int result = FunctionDelete.delete(POST_FILE_PATH);
+            int result = FunctionDelete.delete(user);
             return result;
         } else if (command.equals("search") || command.equals("6")) {
-            int result = FunctionSearch.search(POST_FILE_PATH);
+            int result = FunctionSearch.search();
             return result;
         } else if (command.equals("clear") || command.equals("7")) {
             TerminalPrinter.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");

@@ -8,10 +8,9 @@ import java.util.Date;
 import org.example.Main;
 
 public class User {
-    private long userId;
+    private Long userId;
     private String nickname;
     private String email;
-    private ArrayList<Long> personalPost;
     private String userStatus;
     private String password;
     private String previousPassword;
@@ -19,22 +18,21 @@ public class User {
     private String birthDate;
     private String joinDate;
 
-    public User(String nickname, String email, String userStatus, String password) {
-        this.userId = makeUserId();
+    public User(Long userId, String nickname, String email,
+                String userStatus, String password, String previousPassword,
+                boolean agreement, String birthDate, String joinDate) {
+        this.userId = userId;
         this.nickname = nickname;
         this.email = email;
-        this.personalPost = new ArrayList<>();
         this.userStatus = userStatus;
         this.password = password;
-        this.previousPassword = "null";
-        this.agreement = false;
-        this.birthDate = "null";
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = format.format(new Date());
-        this.joinDate = date;
+        this.previousPassword = previousPassword;
+        this.agreement = agreement;
+        this.birthDate = birthDate;
+        this.joinDate = joinDate;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
@@ -44,10 +42,6 @@ public class User {
 
     public String getEmail() {
         return email;
-    }
-
-    public ArrayList<Long> getPersonalPost() {
-        return personalPost;
     }
 
     public String getUserStatus() {

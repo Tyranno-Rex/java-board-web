@@ -1,126 +1,237 @@
 package org.example.functions.post;
 
-import org.example.Database.getFile;
+import org.example.model.User;
 import org.example.view.TerminalPrinter;
-import org.example.view.ViewJsonData;
-import org.json.simple.*;
-import org.json.simple.parser.JSONParser;
-
-import java.io.*;
+import java.sql.*;
 import java.util.*;
+import static org.example.functions.utils.utils.getNumber;
 
 public class FunctionDetail {
-    public static int edit(File[] fileList, int index, JSONObject original, String FILE_PATH) {
-        try {
-            Scanner scanner = new Scanner(System.in);
-            TerminalPrinter.println("게시물의 제목을 수정해주세요: ");
-            String title = scanner.nextLine();
-            TerminalPrinter.println("게시물의 내용을 수정해주세요: ");
-            String body = scanner.nextLine();
-            original.replace("title", title);
-            original.replace("body", body);
-            original.put("edit", new java.util.Date().toString());
-            FileWriter fileWriter = new FileWriter(fileList[index]);
-            fileWriter.write(original.toJSONString());
-            fileWriter.close();
-            TerminalPrinter.println("게시물이 수정되었습니다.");
-        } catch (Exception e) {
+
+
+    public static void getComment(String index) {
+        String url = "jdbc:mysql://192.168.22.1:3306/java";
+        String username = "eunseong";
+        String pw = "1234";
+        String sql = "select count(*) from Comment where post_id = " + index;
+
+        try (Connection connection = DriverManager.getConnection(url, username, pw);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet resultset = statement.executeQuery();
+            if (connection != null) {
+                while (resultset.next()) {
+                    int cnt = resultset.getInt(1);
+                    if (cnt == 0) {
+                        TerminalPrinter.println("댓글이 없습니다.");
+                    } else {
+                        String sql2 = "select * from Comment where post_id = " + index;
+                        try (Connection connection2 = DriverManager.getConnection(url, username, pw);
+                             PreparedStatement statement2 = connection2.prepareStatement(sql2)) {
+                            ResultSet resultset2 = statement2.executeQuery();
+                            if (connection2 != null) {
+                                while (resultset2.next()) {
+                                    TerminalPrinter.println(resultset2.getString("comment"));
+                                }
+                            }
+                        } catch (SQLException e) {
+                            System.out.println("Connection Failed! Check output console");
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                statement.close();
+                resultset.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Connection Failed! Check output console");
             e.printStackTrace();
-            return 0;
         }
-        return 1;
     }
 
-    public static int detail(String FILE_PATH) {
+    public static int getCommentCnt(int index) {
+        String url = "jdbc:mysql://192.168.22.1:3306/java";
+        String username = "eunseong";
+        String pw = "1234";
+        String sql = "select count(*) from Comment where post_id = " + index;
+        int cnt = 0;
+        try (Connection connection = DriverManager.getConnection(url, username, pw);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet resultset = statement.executeQuery();
+            if (connection != null) {
+                while (resultset.next()) {
+                    cnt = resultset.getInt(1);
+                }
+            }
+            statement.close();
+            resultset.close();
+        } catch (SQLException e) {
+            System.out.println("Connection Failed! Check output console");
+            e.printStackTrace();
+        }
+        return cnt;
+    }
+
+    public static int detail(User user) {
+        int index;
         try {
-            File folder = getFile.accessFolder(FILE_PATH);
-            File[] fileList = folder.listFiles();
-            assert fileList != null;
-
-            getFile.show_filelist(fileList);
-
+            FunctionList list = new FunctionList();
+            list.list();
             TerminalPrinter.print("상세 조회할 게시물의 번호를 입력해주세요: ");
-            Scanner scanner = new Scanner(System.in);
-            int index = scanner.nextInt();
-
-            if (fileList.length <= index) {
-                TerminalPrinter.println("잘못된 번호를 입력하셨습니다.");
+            try {
+                index = getNumber();
+            } catch (InputMismatchException e) {
+                TerminalPrinter.println("숫자를 입력해주세요.");
                 return 0;
             }
 
-            File file = fileList[index];
-            TerminalPrinter.println("\n검색하신 게시물의 정보입니다.\n");
-            TerminalPrinter.println("---------------------------------");
-            TerminalPrinter.println("검색한 게시물 제목: " + file.getName());
-            TerminalPrinter.println("---------------------------------");
-            TerminalPrinter.println("검색한 게시물 내용:");
-            TerminalPrinter.println("---------------------------------");
-            FileReader fileReader = new FileReader(file);
-            JSONParser parser = new JSONParser();
-            Object obj = parser.parse(fileReader);
-            JSONObject original = (JSONObject) obj;
+            String url = "jdbc:mysql://192.168.22.1:3306/java";
+            String username = "eunseong";
+            String pw = "1234";
+            String sql = "select * from Post where post_id = " + index;
 
-            // 화면에 랜더링할 정보를 감싼다.
-            JSONObject view_object;
-            view_object = new JSONObject();
-            view_object.put("title", original.get("title"));
-            view_object.put("body", original.get("body"));
-            view_object.put("date", original.get("date"));
-            view_object.put("user", original.get("user"));
-            view_object.put("edit", original.get("edit"));
-            view_object.put("view", original.get("view"));
-            view_object.put("comment", original.get("comment"));
-            view_object.put("like", original.get("like"));
-            view_object.put("dislike", original.get("dislike"));
+            try (Connection connection = DriverManager.getConnection(url, username, pw);
+                 PreparedStatement statement = connection.prepareStatement(sql)) {
+                ResultSet resultset = statement.executeQuery();
+                if (connection != null) {
+                    while (resultset.next()) {
+                        TerminalPrinter.println("조회되었습니다.");
+                        TerminalPrinter.println("---------------------------------");
+                        TerminalPrinter.println("\n검색하신 게시물의 정보입니다.\n");
+                        TerminalPrinter.println("---------------------------------");
+                        assert resultset != null;
+                        TerminalPrinter.println("제목: " + resultset.getString(4));
+                        TerminalPrinter.println("---------------------------------");
+                        TerminalPrinter.println("내용: " + resultset.getString("content"));
+                        TerminalPrinter.println("작성일:" + resultset.getString("date"));
+                        TerminalPrinter.println("수정일:" + resultset.getString("modified_date"));
+                        TerminalPrinter.println("조회수:" + resultset.getString("views"));
+                        if (resultset.getString(3).equals("anonymous")) {
+                            TerminalPrinter.println("익명 게시물입니다.");
+                        } else {
+                            TerminalPrinter.println("작성자: " + resultset.getString("user_id"));
+                        }
+                        TerminalPrinter.println("추천수♡: " + resultset.getString("likes"));
+                        TerminalPrinter.println("비추천수♥: " + resultset.getString("dislikes"));
+                        TerminalPrinter.println("댓글: ");
+                        getComment(resultset.getString("post_id"));
 
-            // 화면에 랜더링할 정보를 출력한다.
-
-            ViewJsonData.printJsonData(view_object);
-            Long view = (Long) original.get("view");
-            original.put("view", view.intValue() + 1);
-
-            while (true) {
-
-                TerminalPrinter.println("1. 댓글 달기\n2. 추천하기\n3. 비추천하기\n4. 수정\n5. 삭제\n6. 뒤로가기");
-                TerminalPrinter.print("원하시는 기능을 선택해주세요: ");
-                int select = scanner.nextInt();
-                if (select == 1) {
-                    TerminalPrinter.print("댓글을 입력해주세요: ");
-                    scanner.nextLine();
-                    String comment = scanner.nextLine();
-                    ArrayList<String> commentList = (ArrayList<String>) original.get("comment");
-                    commentList.add(comment);
-                    original.put("comment", commentList);
-                    TerminalPrinter.println("댓글이 등록되었습니다.");
-                } else if (select == 2) {
-                    Long like = (Long) original.get("like");
-                    original.put("like", like.intValue() + 1);
-                    TerminalPrinter.println("추천이 등록되었습니다.");
-                } else if (select == 3) {
-                    Long dislike = (Long) original.get("dislike");
-                    original.put("dislike", dislike.intValue() + 1);
-                    TerminalPrinter.println("비추천이 등록되었습니다.");
-                } else if (select == 4) {
-                    if (edit(fileList, index, original, FILE_PATH) == 0) {
+                        TerminalPrinter.println("---------------------------------");
                     }
-                } else if (select == 5) {
-                    file.delete();
-                    TerminalPrinter.println("게시물이 삭제되었습니다.");
-                } else if (select == 6) {
-                    break;
-                } else {
-                    TerminalPrinter.println("잘못된 번호를 입력하셨습니다.");
                 }
+                statement.close();
+                resultset.close();
+            } catch (SQLException e) {
+                System.out.println("Connection Failed! Check output console");
+                e.printStackTrace();
             }
-            FileWriter fileWriter = new FileWriter(fileList[index]);
-            fileWriter.write(original.toJSONString());
-            fileWriter.close();
-        }
-        catch (Exception e) {
+
+
+            // 상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로):
+            TerminalPrinter.println("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로): ");
+
+            try {
+                int choice = getNumber();
+
+                if (choice == 1) {
+                    int commentCnt = getCommentCnt(index);
+                    TerminalPrinter.println("댓글을 입력해주세요: ");
+                    Scanner scanner = new Scanner(System.in);
+                    String comment = scanner.nextLine();
+                    String sql2 = "insert into Comment (comment_id, post_id, comment, nickname) values (?, ?, ?, ?)";
+                    try (Connection connection = DriverManager.getConnection(url, username, pw);
+                         PreparedStatement statement = connection.prepareStatement(sql2)) {
+                        System.out.println(commentCnt + 1);
+                        statement.setLong(1, commentCnt + 1);
+                        statement.setLong(2, index);
+                        statement.setString(3, comment);
+                        statement.setString(4, user.getNickname());
+                        int rowsAffected = statement.executeUpdate();
+                        if (rowsAffected > 0) {
+                            TerminalPrinter.println("댓글 등록에 성공했습니다.");
+                        } else {
+                            TerminalPrinter.println("댓글 등록에 실패했습니다.");
+                        }
+                        statement.close();
+                    } catch (SQLException e) {
+                        System.out.println("Connection Failed! Check output console");
+                        e.printStackTrace();
+                    }
+                }
+
+                if (choice == 2) {
+                    String sql2 = "select likes from Post where post_id = ?";
+                    try (Connection connection = DriverManager.getConnection(url, username, pw);
+                         PreparedStatement statement = connection.prepareStatement(sql2)) {
+                        statement.setInt(1, index);
+                        ResultSet resultSet = statement.executeQuery();
+                        if (resultSet.next()) {
+                            int likes = resultSet.getInt("likes");
+                            likes++;
+                            String sql3 = "update Post set likes = ? where post_id = ?";
+                            try (PreparedStatement updateStatement = connection.prepareStatement(sql3)) {
+                                updateStatement.setInt(1, likes);
+                                updateStatement.setInt(2, index);
+                                updateStatement.executeUpdate();
+                            }
+                        }
+                        statement.close();
+                        resultSet.close();
+                    } catch (SQLException e) {
+                        System.out.println("Connection Failed! Check output console");
+                        e.printStackTrace();
+                    }
+                }
+                if (choice == 3) {
+                    TerminalPrinter.println("수정할 내용을 입력해주세요: ");
+                    Scanner scanner = new Scanner(System.in);
+                    String content = scanner.nextLine();
+                    String sql2 = "update Post set content = '" + content + "' where post_id = " + index;
+                    try (Connection connection = DriverManager.getConnection(url, username, pw);
+                         PreparedStatement statement = connection.prepareStatement(sql2)) {
+                        statement.executeUpdate();
+                    } catch (SQLException e) {
+                        System.out.println("Connection Failed! Check output console");
+                        e.printStackTrace();
+                    }
+                }
+                if (choice == 4) {
+                    String sql2 = "delete from Post where post_id = " + index;
+                    try (Connection connection = DriverManager.getConnection(url, username, pw);
+                         PreparedStatement statement = connection.prepareStatement(sql2)) {
+                        statement.executeUpdate();
+                    } catch (SQLException e) {
+                        System.out.println("Connection Failed! Check output console");
+                        e.printStackTrace();
+                    }
+                }
+                if (choice == 5) {
+                    return 1;
+                }
+
+            } catch (InputMismatchException e) {
+                TerminalPrinter.println("숫자를 입력해주세요.");
+                return 0;
+            }
+            try (Connection connection = DriverManager.getConnection(url, username, pw);
+                 PreparedStatement statement = connection.prepareStatement(sql)) {
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    int post_id = resultSet.getInt("post_id");
+                    int views = resultSet.getInt("views");
+                    views++;
+                    String sql2 = "update Post set views = ? where post_id = ?";
+                    try (PreparedStatement updateStatement = connection.prepareStatement(sql2)) {
+                        updateStatement.setInt(1, views);
+                        updateStatement.setInt(2, post_id);
+                        updateStatement.executeUpdate();
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println("Connection Failed! Check output console");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-            return 0;
-        } catch (AssertionError e) {
-            TerminalPrinter.println("게시물이 존재하지 않습니다.");
             return 0;
         }
         return 1;

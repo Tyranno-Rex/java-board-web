@@ -11,33 +11,49 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.StringTokenizer;
+
+import static org.example.functions.utils.utils.getString;
 
 public class login {
     public static User login(String USER_FILE_PATH) throws Exception{
+        try {
 
-        File[] fileList = getFile.returnfilelist(USER_FILE_PATH);
-        assert fileList != null;
+            TerminalPrinter.print("아이디: ");
+            String id = getString();
+            TerminalPrinter.print("비밀번호: ");
+            String password = getString();
+            String url = "jdbc:mysql://192.168.22.1:3306/java";
+            String username = "eunseong";
+            String pw = "1234";
+            String sql = "SELECT * FROM User WHERE ID = '" + id + "' AND password = '" + password + "'";
 
-        TerminalPrinter.print("아이디: ");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        String id = st.nextToken();
-        TerminalPrinter.print("비밀번호: ");
-        st = new StringTokenizer(br.readLine());
-        String password = st.nextToken();
-
-        for (File file : fileList) {
-            JSONObject user_json = FileToJson.FileToJson(file);
-            if (user_json.get("id").equals(id) && user_json.get("password").equals(password)) {
-                User user = new User((String) user_json.get("id"),
-                            (String) user_json.get("password"),
-                            (String) user_json.get("nickname"),
-                            (String) user_json.get("email"));
-                return user;
+            try (Connection connection = DriverManager.getConnection(url, username, pw);
+                 java.sql.Statement statement = connection.createStatement();
+                 java.sql.ResultSet resultSet = statement.executeQuery(sql)) {
+                if (resultSet.next()) {
+                    TerminalPrinter.println("로그인 성공");
+                    return new User(resultSet.getLong("user_id"),
+                            resultSet.getString("nickname"),
+                            resultSet.getString("email"),
+                            resultSet.getString("user_status"),
+                            resultSet.getString("password"),
+                            resultSet.getString("previous_Password"),
+                            resultSet.getBoolean("agreement"),
+                            resultSet.getString("birth"),
+                            resultSet.getString("join_date"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
+            TerminalPrinter.println("로그인 실패");
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        TerminalPrinter.println("로그인 실패");
-        return null;
     }
 }

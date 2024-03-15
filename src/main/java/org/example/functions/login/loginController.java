@@ -26,8 +26,10 @@ public class loginController {
                 }
             } else if (num == 2) {
                 signup.signup(USER_FILE_PATH);
+                loop();
             } else if (num == 3) {
                 findPassword.findPassword(USER_FILE_PATH);
+                loop();
             } else {
                 TerminalPrinter.println("잘못된 입력입니다.");
             }

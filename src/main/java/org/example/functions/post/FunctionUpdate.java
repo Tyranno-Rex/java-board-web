@@ -1,107 +1,73 @@
 package org.example.functions.post;
 
-import org.example.Database.FileToJson;
-import org.example.Database.getFile;
+import org.example.model.User;
 import org.example.view.TerminalPrinter;
-import org.json.JSONException;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Scanner;
 
-import java.io.*;
-import java.util.StringTokenizer;
-
+import static org.example.functions.utils.utils.getNumber;
 public class FunctionUpdate {
 
-    public static int update(String FILE_PATH) throws JSONException {
-
+    public static int update(User user)  {
         String title;
         int index;
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            FunctionList.list();
+            TerminalPrinter.println("수정할 게시물의 번호를 입력해주세요:(취소: -1)");
+            index = getNumber();
+            if (index == -1 || !AuthCheck.check(user.getNickname(), index)){
+                return -1;
+            }
+            String url = "jdbc:mysql://192.168.22.1:3306/java";
+            String username = "eunseong";
+            String pw = "1234";
+            String sql = "SELECT * FROM Post WHERE post_id = " + index;
+            TerminalPrinter.println("1. 제목 수정, 2. 내용 수정");
+            int choice = getNumber();
+            try (Connection connection = DriverManager.getConnection(url, username, pw);
+                 PreparedStatement statement = connection.prepareStatement(sql)) {
+                ResultSet resultSet = statement.executeQuery();
+                if (!resultSet.next()) {
+                    TerminalPrinter.println("존재하지 않는 게시물입니다.");
+                    return 0;
+                }
 
-            File folder = getFile.accessFolder(FILE_PATH);
-            File[] fileList = folder.listFiles();
-            getFile.show_filelist(fileList);
-            assert fileList != null;
-
-            TerminalPrinter.println("수정할 게시물의 번호를 입력해주세요: ");
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            index = Integer.parseInt(st.nextToken());
-
-            if (fileList.length <= index) {
-                TerminalPrinter.println("잘못된 입력입니다.");
+                if (choice == 1){
+                    TerminalPrinter.println("현재 제목: " + resultSet.getString(5));
+                    TerminalPrinter.println("수정할 제목을 입력해주세요:");
+                    Scanner sc = new Scanner(System.in);
+                    title = sc.nextLine();
+                    sql = "UPDATE Post SET title = ? WHERE post_id = ?";
+                    try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
+                        statement2.setString(1, title);
+                        statement2.setInt(2, index);
+                        statement2.executeUpdate();
+                        TerminalPrinter.println("수정이 완료되었습니다.");
+                    }
+                }
+                if (choice == 2){
+                    TerminalPrinter.println("수정할 내용을 입력해주세요:");
+                    Scanner sc = new Scanner(System.in);
+                    title = sc.nextLine();
+                    sql = "UPDATE Post SET content = ? WHERE post_id = ?";
+                    try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
+                        statement2.setString(1, title);
+                        statement2.setInt(2, index);
+                        statement2.executeUpdate();
+                        TerminalPrinter.println("수정이 완료되었습니다.");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
                 return 0;
             }
-            TerminalPrinter.println("수정할 게시물의 제목을 입력해주세요: ");
-            StringTokenizer st2 = new StringTokenizer(br.readLine());
-            title = st2.nextToken();
-
-            File originalFile = fileList[index];
-            if (originalFile.renameTo(new File(FILE_PATH + title + ".json"))) {
-                TerminalPrinter.println("파일이름이 변경되었습니다.");
-            } else {
-                TerminalPrinter.println("파일이름 변경이 실패했습니다.");
-            }
-        } catch (IOException e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return 0;
-        }
-
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-            File[] fileList = getFile.returnfilelist(FILE_PATH);
-            JSONObject original = null;
-
-            for (File file : fileList) {
-                if (file.getName().equals(title + ".json")) {
-                    original = FileToJson.FileToJson(file);
-                }
-            }
-           assert original != null;
-            TerminalPrinter.println("게시물의 버전을 선택해주세요: ");
-            TerminalPrinter.println("1. 게시물 이어 쓰기  2. 게시물 덮어쓰기");
-
-            StringTokenizer st3 = new StringTokenizer(br.readLine());
-            int version = Integer.parseInt(st3.nextToken());
-            TerminalPrinter.println("게시물의 제목을 입력해주세요: ");
-
-            StringTokenizer st4 = new StringTokenizer(br.readLine());
-            String body = st4.nextToken();
-            if (version == 1)
-                original.put("body", original.get("body") + "\n" + body);
-            else if (version == 2) {
-                original.remove("body");
-                original.put("body", body);
-            } else {
-                TerminalPrinter.println("잘못된 입력입니다.");
-                return 0;
-            }
-            original.put("title", title);
-
-            // 파일을 업데이트합니다.
-            FileWriter fileWriter = new FileWriter(fileList[index]);
-            fileWriter.write(original.toString());
-            fileWriter.close();
-        }
-
-        catch (FileNotFoundException e) {
-            TerminalPrinter.println("파일을 찾을 수 없습니다." + e.getMessage());
-            e.printStackTrace();
-        } catch (IOException e) {
-            TerminalPrinter.println("파일을 읽거나 쓰는 도중 오류가 발생했습니다: " + e.getMessage());
-            e.printStackTrace();
-        } catch (
-        ParseException e) {
-            TerminalPrinter.println("파일 파싱 중 오류가 발생했습니다: " + e.getMessage());
-            e.printStackTrace();
-        } catch (
-        JSONException e) {
-            TerminalPrinter.println("JSON 형식 오류: " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
         return 5;
     }

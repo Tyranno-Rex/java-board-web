@@ -3,7 +3,8 @@ package org.example.model;
 
 public class Post {
     private long postId;
-    private long userId;
+    private Long userId;
+    private String nickname;
     private boolean isAnonymous;
     private String title;
     private String body;
@@ -13,9 +14,10 @@ public class Post {
     private int likeCount;
     private int dislikeCount;
 
-    public Post(long postId, long userId, boolean isAnonymous, String title, String body, String date, String editDate, int viewCount, int likeCount, int dislikeCount) {
+    public Post(long postId, Long userId, String Nickname, boolean isAnonymous, String title, String body, String date, String editDate, int viewCount, int likeCount, int dislikeCount) {
         this.postId = postId;
         this.userId = userId;
+        this.nickname = Nickname;
         this.isAnonymous = isAnonymous;
         this.title = title;
         this.body = body;
@@ -38,7 +40,15 @@ public class Post {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

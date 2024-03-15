@@ -6,10 +6,6 @@ import org.example.view.TerminalPrinter;
 import org.example.model.User;
 import java.util.Scanner;
 
-
-
-
-
 public class server {
     public static void server() throws Exception {
 

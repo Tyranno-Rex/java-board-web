@@ -1,7 +1,6 @@
 package org.example.functions.post;
 
 import org.example.view.TerminalPrinter;
-
 import java.io.*;
 import java.sql.*;
 import java.util.StringTokenizer;
@@ -60,7 +59,7 @@ public class FunctionSearch {
         }
         return 1;
     }
-    public static int search(String FILE_PATH) throws IOException {
+    public static int search() throws IOException {
         TerminalPrinter.println("찾고자하는 방식을 선택해주세요");
         TerminalPrinter.println("1. 제목으로 검색");
         TerminalPrinter.println("2. 내용으로 검색");
