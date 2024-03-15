@@ -7,8 +7,6 @@ import java.util.Scanner;
 
 
 public class loginController {
-    private static String USER_FILE_PATH =  System.getProperty("user.dir") + "\\src\\db\\User\\";
-
     public static User loop() {
         try {
             TerminalPrinter.println("1. 로그인 2. 회원가입 3. 비밀번호 찾기");
@@ -21,14 +19,14 @@ public class loginController {
             // 입력값에 따른 처리
             User user;
             if (num == 1) {
-                if ((user = login.login(USER_FILE_PATH)) != null){
+                if ((user = login.login()) != null){
                     return user;
                 }
             } else if (num == 2) {
-                signup.signup(USER_FILE_PATH);
+                signup.signup();
                 loop();
             } else if (num == 3) {
-                findPassword.findPassword(USER_FILE_PATH);
+                findPassword.findPassword();
                 loop();
             } else {
                 TerminalPrinter.println("잘못된 입력입니다.");
@@ -44,7 +42,6 @@ public class loginController {
         }
         return null;
     }
-
 
     public static User loginController() throws Exception {
 

@@ -5,13 +5,13 @@ import java.io.*;
 import java.sql.*;
 import java.util.StringTokenizer;
 
+import static org.example.functions.utils.utils.getNumber;
+import static org.example.functions.utils.utils.getString2;
+
 public class FunctionSearch {
 
     public static int searchByBody() throws IOException {
-        TerminalPrinter.print("검색할 내용을 입력해주세요: ");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        String body = st.nextToken();
+        String body = getString2("검색할 내용을 입력해주세요: ");
 
         String url = "jdbc:mysql://192.168.22.1:3306/java";
         String username = "eunseong";
@@ -35,10 +35,8 @@ public class FunctionSearch {
     }
 
     public static int searchByTitle() throws IOException {
-        TerminalPrinter.print("검색할 제목을 입력해주세요: ");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        String title = st.nextToken();
+        String title = getString2("검색할 제목을 입력해주세요: ");
+
         String url = "jdbc:mysql://192.168.22.1:3306/java";
         String username = "eunseong";
         String pw = "1234";
@@ -63,8 +61,7 @@ public class FunctionSearch {
         TerminalPrinter.println("찾고자하는 방식을 선택해주세요");
         TerminalPrinter.println("1. 제목으로 검색");
         TerminalPrinter.println("2. 내용으로 검색");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int choice = Integer.parseInt(br.readLine());
+        int choice = getNumber();
         if (choice == 1) {
             searchByTitle();
         } else if (choice == 2) {

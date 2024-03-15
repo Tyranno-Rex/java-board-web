@@ -10,6 +10,7 @@ import org.example.Main;
 public class User {
     private Long userId;
     private String nickname;
+    private String ID;
     private String email;
     private String userStatus;
     private String password;
@@ -18,11 +19,12 @@ public class User {
     private String birthDate;
     private String joinDate;
 
-    public User(Long userId, String nickname, String email,
+    public User(Long userId, String nickname, String ID, String email,
                 String userStatus, String password, String previousPassword,
                 boolean agreement, String birthDate, String joinDate) {
         this.userId = userId;
         this.nickname = nickname;
+        this.ID = ID;
         this.email = email;
         this.userStatus = userStatus;
         this.password = password;
@@ -39,6 +41,8 @@ public class User {
     public String getNickname() {
         return nickname;
     }
+
+    public String getID() {return ID;}
 
     public String getEmail() {
         return email;
@@ -69,19 +73,32 @@ public class User {
     }
 
 
-    public static int getUserCount(Connection connection) {
-        int userCount = 0;
+    public static Long getUserCount() {
+        Long userCount = 0L;
+        String url = "jdbc:mysql://192.168.22.1:3306/java";
+        String username = "eunseong";
+        String pw = "1234";
         String sql = "SELECT COUNT(*) FROM User";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    System.out.println(resultSet.getInt(1));
-                    userCount = resultSet.getInt(1);
-                }
+        try (Connection connection = DriverManager.getConnection(url, username, pw);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+                System.out.println(resultSet.getInt(1));
+                userCount = resultSet.getLong(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+//        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+//            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+//                if (resultSet.next()) {
+//                    System.out.println(resultSet.getInt(1));
+//                    userCount = resultSet.getInt(1);
+//                }
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         return userCount;
     }
 
@@ -91,7 +108,7 @@ public class User {
         String pw = "1234";
         try (Connection connection = DriverManager.getConnection(url, username, pw)){
             if (connection != null) {
-                int userCount = getUserCount(connection);
+                long userCount = getUserCount();
                 System.out.println("Connected to the database");
                 return userCount;
             }
