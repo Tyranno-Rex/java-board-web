@@ -17,7 +17,7 @@ public class FunctionDetail {
     public static void getComment(String index) {
         String sql = "SELECT * FROM Comment where post_id = " + index;
         SQLController sqlController = new SQLController();
-        List<?> commentsList = sqlController.getList(sql);
+        List<?> commentsList = sqlController.getList(sql, Comments.class);
         for (Object comment : commentsList) {
             if (comment instanceof Comments) {
                 Comments typedComment = (Comments) comment;
@@ -129,14 +129,12 @@ public class FunctionDetail {
                         String sql2 = "update Post set content = '" + content + "' where post_id = " + index;
                         sqlController.executeSQL(sql2);
                      }
-                     else TerminalPrinter.println("권한이 없습니다.");
                 }
                 if (choice == 5) {
                     if (AuthCheck.check(user.getNickname(), index)) {
                         String sql2 = "delete from Post where post_id = " + index;
                         sqlController.executeSQL(sql2);
                     }
-                    else TerminalPrinter.println("권한이 없습니다.");
                 }
                 if (choice == 6 || choice > 6 || choice < 1) {
                     return 1;

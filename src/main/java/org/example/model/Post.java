@@ -14,6 +14,9 @@ public class Post {
     private int likeCount;
     private int dislikeCount;
 
+    public Post() {
+    }
+
     public Post(long postId, Long userId, String Nickname, boolean isAnonymous, String title, String body, String date, String editDate, int viewCount, int likeCount, int dislikeCount) {
         this.postId = postId;
         this.userId = userId;

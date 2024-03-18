@@ -1,12 +1,12 @@
 package org.example.model;
 
 public class Comments {
-
     private long commentId;
     private long postId;
     private String comment;
-
     private String nickname;
+    public Comments() {
+    }
 
     public Comments(long commentId, long postId, String comment, String nickname) {
         this.commentId = commentId;
@@ -46,6 +46,4 @@ public class Comments {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-
-
 }

@@ -17,7 +17,7 @@ public class FunctionSearch {
         String body = getString2("검색할 내용을 입력해주세요: ");
         String sql = "SELECT * FROM Post WHERE content LIKE '%" + body + "%'";
         SQLController sqlcontroller = new SQLController();
-        List<?> postList = sqlcontroller.getList(sql);
+        List<?> postList = sqlcontroller.getList(sql, Post.class);
 
         for (Object post : postList) {
             if (post instanceof Post) {
@@ -32,7 +32,7 @@ public class FunctionSearch {
         String title = getString2("검색할 제목을 입력해주세요: ");
         String sql = "SELECT * FROM Post WHERE title LIKE '%" + title + "%'";
         SQLController sqlcontroller = new SQLController();
-        List<?> postList = sqlcontroller.getList(sql);
+        List<?> postList = sqlcontroller.getList(sql, Post.class);
 
         for (Object post : postList) {
             if (post instanceof Post) {
