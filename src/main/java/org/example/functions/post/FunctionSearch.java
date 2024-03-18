@@ -1,8 +1,11 @@
 package org.example.functions.post;
 
+import org.example.Database.SQLController;
+import org.example.model.Post;
 import org.example.view.TerminalPrinter;
 import java.io.*;
 import java.sql.*;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import static org.example.functions.utils.utils.getNumber;
@@ -12,48 +15,30 @@ public class FunctionSearch {
 
     public static int searchByBody() throws IOException {
         String body = getString2("검색할 내용을 입력해주세요: ");
-
-        String url = "jdbc:mysql://192.168.22.1:3306/java";
-        String username = "eunseong";
-        String pw = "1234";
         String sql = "SELECT * FROM Post WHERE content LIKE '%" + body + "%'";
+        SQLController sqlcontroller = new SQLController();
+        List<?> postList = sqlcontroller.getList(sql);
 
-        try (Connection connection = DriverManager.getConnection(url, username, pw);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            if (connection != null) {
-                ResultSet resultSet = statement.executeQuery();
-                while (resultSet.next()) {
-                    TerminalPrinter.println(resultSet.getString(4) + " " + resultSet.getString(5));
-                }
-                TerminalPrinter.println("검색되었습니다.");
+        for (Object post : postList) {
+            if (post instanceof Post) {
+                Post typedPost = (Post) post;
+                TerminalPrinter.println(typedPost.getPostId() + ". " + typedPost.getTitle());
             }
-        } catch (SQLException e) {
-            System.out.println("Connection Failed! Check output console");
-            e.printStackTrace();
         }
         return 1;
     }
 
     public static int searchByTitle() throws IOException {
         String title = getString2("검색할 제목을 입력해주세요: ");
-
-        String url = "jdbc:mysql://192.168.22.1:3306/java";
-        String username = "eunseong";
-        String pw = "1234";
         String sql = "SELECT * FROM Post WHERE title LIKE '%" + title + "%'";
+        SQLController sqlcontroller = new SQLController();
+        List<?> postList = sqlcontroller.getList(sql);
 
-        try (Connection connection = DriverManager.getConnection(url, username, pw);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            if (connection != null) {
-                ResultSet resultSet = statement.executeQuery();
-                while (resultSet.next()) {
-                    TerminalPrinter.println(resultSet.getString(4) + " " + resultSet.getString(5));
-                }
-                TerminalPrinter.println("검색되었습니다.");
+        for (Object post : postList) {
+            if (post instanceof Post) {
+                Post typedPost = (Post) post;
+                TerminalPrinter.println(typedPost.getPostId() + ". " + typedPost.getTitle());
             }
-        } catch (SQLException e) {
-            System.out.println("Connection Failed! Check output console");
-            e.printStackTrace();
         }
         return 1;
     }

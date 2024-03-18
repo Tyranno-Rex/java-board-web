@@ -21,24 +21,19 @@ public class FunctionADD {
         }
         return cnt + 1;
     }
-    public static void sendsqlusePost(Post post) {
-        String sql = "INSERT INTO Post (post_id, user_id, nickname, anonymous, title, " +
-                "content, date, modified_date, views, likes, dislikes) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        SQLController sqlController = new SQLController();
-        sqlController.insertPost(sql, new Post(post.getPostId(), post.getUserId(), post.getNickname(),
-                                        post.isAnonymous(), post.getTitle(), post.getBody(), post.getDate(),
-                                        post.getEditDate(), post.getViewCount(), post.getLikeCount(),
-                                        post.getDislikeCount()));
-        TerminalPrinter.println(sql);
-    }
     public static int add( User user) {
         try  {
             String title = getString2("게시물의 제목을 입력해주세요: ");
             String body = getString2("게시물의 내용을 입력해주세요: ");
             Post post = new Post(getPostId(), user.getUserId(), user.getNickname(),  false,
                     title, body, GetDate(), GetDate(), 0, 0, 0);
-            sendsqlusePost(post);
+
+            SQLController sqlController = new SQLController();
+            sqlController.executeSQL("INSERT INTO Post (post_id, user_id, nickname, anonymous, title, " +
+                    "content, date, modified_date, views, likes, dislikes) " +
+                    "VALUES (" + post.getPostId() + ", " + post.getUserId() + ", '" + post.getNickname() + "', " +
+                    post.isAnonymous() + ", '" + post.getTitle() + "', '" + post.getBody() + "', '" + post.getDate() + "', '" +
+                    post.getEditDate() + "', " + post.getViewCount() + ", " + post.getLikeCount() + ", " + post.getDislikeCount() + ")");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

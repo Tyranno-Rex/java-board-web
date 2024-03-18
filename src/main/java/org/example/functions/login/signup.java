@@ -94,11 +94,15 @@ public class signup {
 
     public static void signupInsert(String id, String nickname, boolean argreement, String email, String password, String birth) {
         String sql = "INSERT INTO User (user_id, ID, nickname, email, user_status, password, " +
-                "previous_password, agreement, birth, join_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "previous_password, agreement, birth, join_date) VALUES (" +
+                getUserCount() + 1 + ", '" + id + "', '" + nickname + "', '" + email + "', 'available', '" + password + "', '', " + argreement + ", '" + birth + "', '" + LocalDate.now().toString() + "')";
+
+//                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         User user = new User(getUserCount() + 1, nickname, id, email, "available",
                 password, "", argreement, birth, LocalDate.now().toString());
         SQLController SQLController = new SQLController();
-        SQLController.insertUser(sql, user);
+        SQLController.executeSQL(sql);
+//        SQLController.insertUser(sql, user);
     }
 
     public static void signup() throws Exception {
