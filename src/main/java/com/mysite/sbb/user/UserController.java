@@ -65,22 +65,6 @@ public class UserController {
     public String findPassword() {
         return "find_password_form";
     }
-
-    @PostMapping("/find_password")
-    public String findPassword(@Valid UserFindPasswordForm userFindPasswordForm, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "find_password_form";
-        }
-        try {
-            userService.findPassword(userFindPasswordForm.getUsername(), userFindPasswordForm.getEmail());
-        }catch(Exception e) {
-            e.printStackTrace();
-            bindingResult.reject("findPasswordFailed", e.getMessage());
-            return "find_password_form";
-        }
-
-        return "redirect:/";
-    }
 }
 
 
