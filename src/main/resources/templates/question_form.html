@@ -1,4 +1,4 @@
-ed!<html layout:decorate="~{layout}">
+<html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container">
     <h5 class="my-3 border-bottom pb-2">질문등록</h5>
     <form th:object="${questionForm}" method="post">
@@ -9,6 +9,10 @@ ed!<html layout:decorate="~{layout}">
             <input type="text" th:field="*{subject}" class="form-control">
         </div>
         <div class="mb-3">
+            <label for="category">해쉬테그:</label>
+            <input type="text" id="categoryInput" name="category" list="categoryList" class="form-control" placeholder="카테고리를 입력해주세요">
+        </div>
+        <div class="mb-3">
             <label for="content" class="form-label">내용</label>
             <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
         </div>
@@ -16,5 +20,3 @@ ed!<html layout:decorate="~{layout}">
     </form>
 </div>
 </html>
-
-

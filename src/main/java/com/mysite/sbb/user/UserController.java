@@ -50,8 +50,38 @@ public class UserController {
 
         return "redirect:/";
     }
+
     @GetMapping("/login")
     public String login() {
         return "login_form";
     }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "logout_form";
+    }
+
+    @GetMapping("/find_password")
+    public String findPassword() {
+        return "find_password_form";
+    }
+
+    @PostMapping("/find_password")
+    public String findPassword(@Valid UserFindPasswordForm userFindPasswordForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "find_password_form";
+        }
+        try {
+            userService.findPassword(userFindPasswordForm.getUsername(), userFindPasswordForm.getEmail());
+        }catch(Exception e) {
+            e.printStackTrace();
+            bindingResult.reject("findPasswordFailed", e.getMessage());
+            return "find_password_form";
+        }
+
+        return "redirect:/";
+    }
 }
+
+
+

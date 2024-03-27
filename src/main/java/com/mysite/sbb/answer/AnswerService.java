@@ -1,18 +1,29 @@
 package com.mysite.sbb.answer;
 
 
-import java.time.LocalDateTime;
-import com.mysite.sbb.user.SiteUser;
-import lombok.RequiredArgsConstructor;
-import com.mysite.sbb.question.Question;
-import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
+import java.time.LocalDateTime;
+
+import com.mysite.sbb.comment.Comment;
+import com.mysite.sbb.comment.CommentService;
+import com.mysite.sbb.user.SiteUser;
+import com.mysite.sbb.question.Question;
 import com.mysite.sbb.DataNotFoundException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import lombok.RequiredArgsConstructor;
+
 
 @RequiredArgsConstructor
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
+    private final CommentService commentService;
 
     public Answer create(Question question, String content, SiteUser author) {
         Answer answer = new Answer();
@@ -46,6 +57,13 @@ public class AnswerService {
     public void vote(Answer answer, SiteUser siteUser) {
         answer.getVoter().add(siteUser);
         this.answerRepository.save(answer);
+    }
+
+    public Page<Answer> getList(Question question, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.asc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5);
+        return this.answerRepository.findAllByQuestion(question, pageable);
     }
 
 }
