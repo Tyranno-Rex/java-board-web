@@ -1,5 +1,6 @@
 package com.mysite.sbb.user;
 
+import java.net.Authenticator;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -30,18 +31,5 @@ public class UserService {
             return siteUser.get();
         else
             throw new DataNotFoundException("siteuser not found");
-    }
-
-    public void findPassword(String username, String email) {
-        SiteUser siteUser = this.getUser(username);
-        if (siteUser.getEmail().equals(email)){
-            // 비밀번호 변경 메일 발송
-            Properties p = System.getProperties();
-
-
-        } else {
-            throw new DataNotFoundException("siteuser not found");
-        }
-
     }
 }
