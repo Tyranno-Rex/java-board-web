@@ -3,6 +3,7 @@ package com.mysite.sbb;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,3 +15,4 @@ public class CommonUtil {
         return renderer.render(document);
     }
 }
+

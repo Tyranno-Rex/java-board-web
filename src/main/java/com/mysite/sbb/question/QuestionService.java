@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.time.LocalDateTime;
+
+import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
 import com.mysite.sbb.DataNotFoundException;
 import com.mysite.sbb.user.SiteUser;
@@ -71,20 +73,30 @@ public class QuestionService {
             throw new DataNotFoundException("Question not found");
         }
     }
-    public void create(String subject, String content, SiteUser user) {
-        Question q = new Question();
-        q.setSubject(subject);
-        q.setContent(content);
-        q.setCreateDate(LocalDateTime.now());
-        q.setAuthor(user);
-        this.questionRepository.save(q);
+
+    public void create(String subject, String content, SiteUser user, String category) {
+        Question question = new Question();
+        question.setSubject(subject);
+        question.setContent(content);
+        question.setCreateDate(LocalDateTime.now());
+        question.setAuthor(user);
+        question.setCategory(category);
+        this.questionRepository.save(question);
     }
 
-    public void modify(Question question, String subject, String content) {
+    public void modify(Question question, String subject, String content, String category) {
         question.setSubject(subject);
         question.setContent(content);
         question.setModifyDate(LocalDateTime.now());
+        question.setCategory(category);
         this.questionRepository.save(question);
+    }
+
+    public void deletebyid(Integer id) {
+        Optional<Question> question = this.questionRepository.findById(id);
+        if (question.isPresent()) {
+            this.questionRepository.deleteById(id);
+        }
     }
 
     public void delete(Question question) {
