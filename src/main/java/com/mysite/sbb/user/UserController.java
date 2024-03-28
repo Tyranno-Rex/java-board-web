@@ -1,15 +1,15 @@
 package com.mysite.sbb.user;
 
 import jakarta.validation.Valid;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.dao.DataIntegrityViolationException;
-
 import lombok.RequiredArgsConstructor;
+
+import com.mysite.sbb.user.UserFindFrom;
 
 @RequiredArgsConstructor
 @Controller
@@ -22,7 +22,6 @@ public class UserController {
     public String signup(UserCreateForm userCreateForm) {
         return "signup_form";
     }
-
     @PostMapping("/signup")
     public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -50,20 +49,44 @@ public class UserController {
 
         return "redirect:/";
     }
-
     @GetMapping("/login")
     public String login() {
         return "login_form";
     }
-
     @GetMapping("/logout")
     public String logout() {
         return "logout_form";
     }
-
     @GetMapping("/find_password")
     public String findPassword() {
         return "find_password_form";
+    }
+    @PostMapping("/find_password")
+    public String findPassword(@Valid UserFindFrom userFindForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "find_password_form";
+        }
+        try {
+            if (userService.findPassword(userFindForm.getUsername(), userFindForm.getEmail()) == null) {
+                bindingResult.reject("findPasswordFailed", "사용자 정보가 일치하지 않습니다.");
+                return "find_password_form";
+            } else {
+                return "redirect:/";
+            }
+        }catch(DataIntegrityViolationException e) {
+            e.printStackTrace();
+            bindingResult.reject("findPasswordFailed", "사용자 정보가 일치하지 않습니다.");
+            return "find_password_form";
+        }catch(Exception e) {
+            e.printStackTrace();
+            bindingResult.reject("findPasswordFailed", e.getMessage());
+            return "find_password_form";
+        }
+    }
+
+    @GetMapping("/profile")
+    public String profile() {
+        return "profile";
     }
 }
 
