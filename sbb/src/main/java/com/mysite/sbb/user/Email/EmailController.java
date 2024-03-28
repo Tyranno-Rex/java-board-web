@@ -33,6 +33,9 @@ public class EmailController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
+
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", 587);
