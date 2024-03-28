@@ -35,5 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
-/src/main/java/com.mysite.sbb/user/Email/Email-password.txt
+!**/src/main/java/com.mysite.sbb/user/Email/Email-password.txt
 ```
