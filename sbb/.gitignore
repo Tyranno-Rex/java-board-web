@@ -37,4 +37,5 @@ out/
 .vscode/
 
 src/main/resources/application.properties
+src/main/java/com.mysite.sbb/user/Email/Email-password.txt
 ```
