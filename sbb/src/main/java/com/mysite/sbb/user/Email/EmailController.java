@@ -6,6 +6,11 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Properties;
 
 @Component
@@ -13,9 +18,21 @@ import java.util.Properties;
 public class EmailController {
     private static String type = "text/html; charset=utf-8";
     private static String emailAdd = "jsilvercastle@gmail.com";
-    private static String password = "rjuo zhca wxkp jbpn";
+    private static String filePath = "./Email-password.txt";
+    private static  String password = "";
+
 
     public static void sendEmail(String username, String email, String newPassword) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\admin\\project\\back-up\\sbb\\src\\main\\java\\com\\mysite\\sbb\\user\\Email\\Email-password.txt", Charset.forName("UTF-8")));
+            String firstLine = reader.readLine();
+            password = firstLine;
+            reader.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", 587);
