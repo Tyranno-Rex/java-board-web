@@ -18,13 +18,12 @@ import java.util.Properties;
 public class EmailController {
     private static String type = "text/html; charset=utf-8";
     private static String emailAdd = "jsilvercastle@gmail.com";
-    private static String filePath = "./Email-password.txt";
     private static  String password = "";
 
 
     public static void sendEmail(String username, String email, String newPassword) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\admin\\project\\back-up\\sbb\\src\\main\\java\\com\\mysite\\sbb\\user\\Email\\Email-password.txt", Charset.forName("UTF-8")));
+            BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\admin\\project\\back-up\\sbb\\src\\main\\jaC:\\Users\\admin\\project\\back-up\\sbb\\src\\main\\java\\com\\mysite\\sbb\\user\\Email\\Email-password.txt", Charset.forName("UTF-8")));
             String firstLine = reader.readLine();
             password = firstLine;
             reader.close();
