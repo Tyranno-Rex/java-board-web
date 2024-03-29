@@ -36,6 +36,14 @@ public class CommentController {
     private final AnswerService answerService;
     private final UserService userService;
 
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/detail/{id}")
+    public void detail(Model model, @PathVariable("id") Integer id) {
+       Comment comment = this.commentService.getComment(id);
+        model.addAttribute("comment", comment);
+    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/create/question/{id}")
     public String createQuestionComment(CommentForm commentForm) {

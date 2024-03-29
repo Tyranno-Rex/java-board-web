@@ -1,5 +1,6 @@
 package com.mysite.sbb.user;
 
+import com.mysite.sbb.user.userForm.UserCreateForm;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.dao.DataIntegrityViolationException;
 import lombok.RequiredArgsConstructor;
 
-import com.mysite.sbb.user.UserFindFrom;
+import com.mysite.sbb.user.userForm.UserFindFrom;
 
 @RequiredArgsConstructor
 @Controller
