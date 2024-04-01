@@ -33,7 +33,12 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
             + "   or u2.username like %:kw% ")
     Page<Question> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
 
-
+    @Query(value = "select q.id " +
+            "from question q " +
+            "left join question_voter qv on qv.question_id = q.id " +
+            "group by q.id " +
+            "order by count(qv.question_id) desc", nativeQuery = true)
+    Page<Integer> findAllByKeywordOrderByLike(@Param("kw") String keyword, Pageable pageable);
 
     @Query("select distinct q " +
             "from Question q " +

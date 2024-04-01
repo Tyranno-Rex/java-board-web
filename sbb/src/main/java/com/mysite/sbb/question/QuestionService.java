@@ -10,11 +10,8 @@ import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
 import com.mysite.sbb.DataNotFoundException;
 import com.mysite.sbb.user.SiteUser;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
 
 import com.mysite.sbb.answer.Answer;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -54,6 +51,23 @@ public class QuestionService {
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return this.questionRepository.findAllByKeyword(kw, pageable);
+    }
+
+
+
+
+    public Page<Question> getListLike(int page, String kw) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Integer> questionsId = questionRepository.findAllByKeywordOrderByLike(kw, pageable);
+
+        List<Question> questions = new ArrayList<>();
+        for (Integer id : questionsId.getContent()) {
+            Question question = questionRepository.findById(id).orElse(null);
+            if (question != null) {
+                questions.add(question);
+            }
+        }
+        return new PageImpl<>(questions, pageable, questionsId.getTotalElements());
     }
 
 
