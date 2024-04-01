@@ -103,12 +103,6 @@ public class UserController {
     public String profile(Model model, Principal principal) {
         model.addAttribute("name", principal.getName());
         model.addAttribute("email", this.userService.getUser(principal.getName()).getEmail());
-//        Page<Question> user_paging = this.questionService.getListbyUser(page, this.userService.getUser(principal.getName()));
-//        model.addAttribute("user_paging", user_paging);
-//        Page<Answer> user_answer_paging = this.answerService.getListbyUser(page, this.userService.getUser(principal.getName()));
-//        model.addAttribute("user_answer_paging", user_answer_paging);
-//        Page<Comment> user_comment_paging = this.commentService.getListbyUser(page, this.userService.getUser(principal.getName()));
-//        model.addAttribute("user_comment_paging", user_comment_paging);
         return "profile";
     }
 }

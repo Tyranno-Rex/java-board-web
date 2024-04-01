@@ -32,7 +32,8 @@ public class profileController {
         @PreAuthorize("isAuthenticated()")
         @GetMapping("/list_article")
         public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page, Principal principal) {
-
+            model.addAttribute("name", principal.getName());
+            model.addAttribute("email", this.userService.getUser(principal.getName()).getEmail());
             Page<Question> user_paging = this.questionService.getListbyUser(page, this.userService.getUser(principal.getName()));
             model.addAttribute("user_paging", user_paging);
             return "profile";
@@ -41,6 +42,8 @@ public class profileController {
         @PreAuthorize("isAuthenticated()")
         @GetMapping("/list_answer")
         public String list_answer(Model model, @RequestParam(value = "page", defaultValue = "0") int page, Principal principal) {
+            model.addAttribute("name", principal.getName());
+            model.addAttribute("email", this.userService.getUser(principal.getName()).getEmail());
             Page<Answer> user_answer_paging = this.answerService.getListbyUser(page, this.userService.getUser(principal.getName()));
             model.addAttribute("user_answer_paging", user_answer_paging);
             return "profile";
@@ -50,6 +53,8 @@ public class profileController {
         @PreAuthorize("isAuthenticated()")
         @GetMapping("/list_comment")
         public String list_comment(Model model, @RequestParam(value = "page", defaultValue = "0") int page, Principal principal) {
+            model.addAttribute("name", principal.getName());
+            model.addAttribute("email", this.userService.getUser(principal.getName()).getEmail());
             Page<Comment> user_comment_paging = this.commentService.getListbyUser(page, this.userService.getUser(principal.getName()));
             model.addAttribute("user_comment_paging", user_comment_paging);
             return "profile";
