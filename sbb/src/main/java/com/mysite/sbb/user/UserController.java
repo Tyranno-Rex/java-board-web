@@ -1,8 +1,16 @@
 package com.mysite.sbb.user;
 
+import com.mysite.sbb.answer.Answer;
+import com.mysite.sbb.answer.AnswerService;
+import com.mysite.sbb.comment.Comment;
+import com.mysite.sbb.comment.CommentService;
+import com.mysite.sbb.question.Question;
+import com.mysite.sbb.question.QuestionService;
 import com.mysite.sbb.user.userForm.UserCreateForm;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,12 +20,18 @@ import lombok.RequiredArgsConstructor;
 
 import com.mysite.sbb.user.userForm.UserFindFrom;
 
+import java.security.Principal;
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
+    private final QuestionService questionService;
+    private final CommentService commentService;
+    private final AnswerService answerService;
+
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -86,7 +100,15 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String profile() {
+    public String profile(Model model, Principal principal) {
+        model.addAttribute("name", principal.getName());
+        model.addAttribute("email", this.userService.getUser(principal.getName()).getEmail());
+//        Page<Question> user_paging = this.questionService.getListbyUser(page, this.userService.getUser(principal.getName()));
+//        model.addAttribute("user_paging", user_paging);
+//        Page<Answer> user_answer_paging = this.answerService.getListbyUser(page, this.userService.getUser(principal.getName()));
+//        model.addAttribute("user_answer_paging", user_answer_paging);
+//        Page<Comment> user_comment_paging = this.commentService.getListbyUser(page, this.userService.getUser(principal.getName()));
+//        model.addAttribute("user_comment_paging", user_comment_paging);
         return "profile";
     }
 }

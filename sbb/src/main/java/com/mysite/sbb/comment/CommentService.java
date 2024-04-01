@@ -47,12 +47,8 @@ public class CommentService {
 
     public Comment getComment(Integer id) {
         Optional<Comment> comment = this.commentRepository.findById(id);
-        if (comment.isPresent()) {
-            return comment.get();
-        } else {
-            throw new DataNotFoundException("코멘트를 찾을 수 없습니다.");
-        }
-        // return this.commentRepository.findById(id);
+        if (comment.isPresent()) return comment.get();
+        else throw new DataNotFoundException("코멘트를 찾을 수 없습니다.");
     }
 
     public Comment modify(Comment comment, String content) {
@@ -66,8 +62,7 @@ public class CommentService {
         this.commentRepository.delete(comment);
     }
 
-
-    public Page<Comment> getListUser(int page, SiteUser user) {
+    public Page<Comment> getListbyUser(int page, SiteUser user) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));

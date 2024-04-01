@@ -23,8 +23,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
-    private final CommentService commentService;
-
     public Answer create(Question question, String content, SiteUser author) {
         Answer answer = new Answer();
         answer.setContent(content);
@@ -37,11 +35,8 @@ public class AnswerService {
 
     public Answer getAnswer(Integer id) {
         Optional<Answer> answer = this.answerRepository.findById(id);
-        if (answer.isPresent()) {
-            return answer.get();
-        } else {
-            throw new DataNotFoundException("answer not found");
-        }
+        if (answer.isPresent()) return answer.get();
+        else throw new DataNotFoundException("answer not found");
     }
 
     public void modify(Answer answer, String content) {
@@ -66,4 +61,10 @@ public class AnswerService {
         return this.answerRepository.findAllByQuestion(question, pageable);
     }
 
+    public Page<Answer> getListbyUser(int page, SiteUser user) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.answerRepository.findAllByUser(user, pageable);
+    }
 }

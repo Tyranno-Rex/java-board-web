@@ -39,7 +39,6 @@ public class AnswerController {
             return "question_detail";
         }
         if (!answerForm.getContent().isEmpty()) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "답변 내용을 입력하세요.");
             Answer answer = this.answerService.create(question, answerForm.getContent(), siteUser);
             return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
         }

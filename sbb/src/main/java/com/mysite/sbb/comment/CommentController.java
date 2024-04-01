@@ -61,7 +61,6 @@ public class CommentController {
             model.addAttribute("question", question);
             return "question_detail";
         }
-
         Comment comment = this.commentService.create(question, commentForm.getContent(), user);
         return String.format("redirect:/question/detail/%s#comment_%s", comment.getQuestion().getId(), comment.getId());
     }

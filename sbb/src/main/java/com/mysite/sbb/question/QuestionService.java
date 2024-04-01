@@ -57,7 +57,7 @@ public class QuestionService {
     }
 
 
-    public Page<Question> getListUser(int page, SiteUser user) {
+    public Page<Question> getListbyUser(int page, SiteUser user) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));

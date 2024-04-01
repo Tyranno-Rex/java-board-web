@@ -51,19 +51,16 @@
         <h1>User Profile</h1>
         <div class="profile-info">
             <label>Nickname:</label>
-            <p>UserNickname</p>
+            <p th:text="${name}"></p>
         </div>
         <div class="profile-info">
             <label>Email:</label>
-            <p>user@example.com</p>
+            <p th:text="${email}"></p>
         </div>
-        <div class="profile-info">
-            <label>Written Articles:</label>
-            <p><a href="#">View Articles</a></p>
-        </div>
+
         <div class="board">
             <h2>My Articles</h2>
-            <a th:href="@{/profile/list_article}" class="btn btn-primary">View All</a>
+            <a th:href="@{/profile/list_article}" class="btn btn-primary">View Articles</a>
             <table>
                 <tr class="text-center" th:each="question, loop : ${user_paging}">
                     <td th:text="${user_paging.totalElements - (user_paging.number * user_paging.size) - loop.index}"></td>
@@ -74,9 +71,6 @@
                               th:text="${#lists.size(question.answerList)}">
                         </span>
                     </td>
-
-
-
                     <td><span th:text="${question.getCategory()}"></span></td>
                     <td><span th:if="${question.author != null}" th:text="${question.author.username}"></span></td>
                     <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
@@ -84,26 +78,32 @@
             </table>
         </div>
 
+        <div class ="board">
+            <h2>My Answers</h2>
+            <a th:href="@{/profile/list_answer}" class="btn btn-primary2">View Answer</a>
+            <table>
+                <tr class="text-center" th:each="answer, loop : ${user_answer_paging}">
+                    <td th:text="${user_answer_paging.totalElements - (user_answer_paging.number * user_answer_paging.size) - loop.index}"></td>
+                    <td class="text-start">
+                        <a th:href="@{|/answer/detail/${answer.id}|}" th:text="${answer.content}"></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
         <div class="board">
             <h2>My Comments</h2>
-            <a th:href="@{/profile/list_comment}" class="btn btn-primary2">View All</a>
+            <a th:href="@{/profile/list_comment}" class="btn btn-primary">View Commnet</a>
             <table>
-                <tr class="text-center" th:each="comment, loop : ${user_paging}">
-                    <td th:text="${user_paging.totalElements - (user_paging.number * user_paging.size) - loop.index}"></td>
+                <tr class="text-center" th:each="comment, loop : ${user_comment_paging}">
+                    <td th:text="${user_comment_paging.totalElements - (user_comment_paging.number * user_comment_paging.size) - loop.index}"></td>
                     <td class="text-start">
                         <a th:href="@{|/comment/detail/${comment.id}|}" th:text="${comment.content}"></a>
                     </td>
                 </tr>
             </table>
         </div>
-
-        <a href="#" class="btn">Edit Profile</a>
     </div>
-
-
-
-
-
-
     </body>
 </html>

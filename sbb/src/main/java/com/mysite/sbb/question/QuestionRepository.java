@@ -42,7 +42,6 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
             "left outer join a.author u2 " +
             "where u1 = :author")
     Page<Question> findByAuthor(SiteUser author, Pageable pageable);
-
 }
 
 
