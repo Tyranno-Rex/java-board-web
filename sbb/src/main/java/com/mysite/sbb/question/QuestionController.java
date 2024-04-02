@@ -45,11 +45,15 @@ public class QuestionController {
 
     @GetMapping(value = "/detail/{id}")
     public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm,
-                         @RequestParam(value = "page", defaultValue = "0") int page) {
+                         @RequestParam(value = "page", defaultValue = "0") int page, Principal principal) {
         Question question = this.questionService.getQuestion(id);
         Page<Answer> answerPaging = this.answerService.getList(question, page);
         model.addAttribute("answerPaging", answerPaging);
         model.addAttribute("question", question);
+        if (principal != null) {
+            SiteUser siteUser = this.userService.getUser(principal.getName());
+            model.addAttribute("viewCount", this.questionService.getViews(question, siteUser));
+        } else model.addAttribute("viewCount", this.questionService.getViews(question));
         return "question_detail";
     }
 

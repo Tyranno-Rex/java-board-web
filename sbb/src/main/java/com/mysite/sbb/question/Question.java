@@ -27,15 +27,11 @@ public class Question {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime createDate;
-
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Answer> answerList;
 
     @ManyToOne
     private SiteUser author;
-
-    private LocalDateTime modifyDate;
 
     @ManyToMany
     Set<SiteUser> voter;
@@ -43,5 +39,10 @@ public class Question {
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
 
+    @ManyToMany
+    Set<SiteUser> viewer;
+
+    private LocalDateTime modifyDate;
     private String category;
+    private LocalDateTime createDate;
 }

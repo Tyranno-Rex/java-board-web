@@ -34,6 +34,10 @@
                             </div>
                             <div th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
                         </div>
+                        <div class="viewcount">
+                            <div class="mb-2">조회수</div>
+                            <div th:text="${viewCount}"></div>
+                        </div>
                     </div>
                     <div class="my-3">
                         <a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
