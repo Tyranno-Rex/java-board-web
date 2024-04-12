@@ -3,7 +3,7 @@ package com.example.sbb2.Answer;
 
 import com.example.sbb2.Question.Question;
 import jakarta.persistence.*;
-import lombok.Generated;
+import com.example.sbb2.User.SiteUser;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,4 +24,9 @@ public class Answer {
 
     @ManyToOne
     private Question question;
+
+    @ManyToOne
+    private SiteUser author;
+
+    private LocalDateTime modifyDate;
 }

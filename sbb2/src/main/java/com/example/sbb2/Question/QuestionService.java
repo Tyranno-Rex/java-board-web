@@ -1,6 +1,7 @@
 package com.example.sbb2.Question;
 
 import com.example.sbb2.Main.DataNotFoundException;
+import com.example.sbb2.User.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +29,12 @@ public class QuestionService {
             throw new DataNotFoundException("entity not found");
         }
     }
-    public void create(String subject, String content) {
+    public void create(String subject, String content, SiteUser user) {
         Question question = new Question();
         question.setSubject(subject);
         question.setContent(content);
         question.setCreateDate(LocalDateTime.now());
+        question.setAuthor(user);
         this.questionRepository.save(question);
     }
 
@@ -43,4 +45,14 @@ public class QuestionService {
         return this.questionRepository.findAll(pageable);
     }
 
+    public void modify(Question question, String subject, String content) {
+        question.setSubject(subject);
+        question.setContent(content);
+        question.setModifyDate(LocalDateTime.now());
+        this.questionRepository.save(question);
+    }
+
+    public void delete(Question question) {
+        this.questionRepository.delete(question);
+    }
 }

@@ -3,6 +3,7 @@ package com.example.sbb2;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -13,10 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 
-import java.net.Authenticator;
-
 @Configuration // 환경 설정 파일
 @EnableWebSecurity // 모든 요청에 대해 인증을 요구하도록 설정
+@EnableMethodSecurity(prePostEnabled = true) // 메소드 호출 전에 권한을 확인하도록 설정
 public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
